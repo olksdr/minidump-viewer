@@ -654,6 +654,7 @@
 		display: flex;
 		align-items: center;
 		gap: 8px;
+		flex-wrap: wrap;
 	}
 
 	.trust-level {
@@ -699,6 +700,11 @@
 		color: var(--retro-text);
 		font-size: 9px;
 		font-weight: 400;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		word-break: break-all;
+		flex: 1;
+		max-width: 100%;
 	}
 
 	.module-name.unknown {
