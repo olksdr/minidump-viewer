@@ -129,4 +129,168 @@
 	.retro-error-details {
 		@apply text-retro-xs text-retro-muted italic mt-retro-lg;
 	}
+
+	/* Collapsible Section Button */
+	.retro-toggle-button {
+		@apply bg-transparent border-0 font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 hover:text-retro-purple;
+	}
+
+	.retro-toggle-indicator {
+		@apply text-retro-purple mr-retro-md font-bold underline min-w-[12px] text-center;
+	}
+
+	.retro-toggle-title {
+		@apply text-retro-text font-medium;
+	}
+
+	.retro-toggle-subtitle {
+		@apply text-retro-muted text-retro-xs font-normal ml-retro-xl;
+	}
+
+	/* Collapsible Content Container */
+	.retro-collapsible-content {
+		@apply m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border/15;
+	}
+
+	.retro-collapsible-content-nested {
+		@apply m-0 ml-retro-5xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border/20;
+	}
+
+	/* Field Display */
+	.retro-field-row {
+		@apply flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight;
+	}
+
+	.retro-field-label {
+		@apply text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis;
+	}
+
+	.retro-field-label-compact {
+		@apply text-retro-purple min-w-[100px] font-medium;
+	}
+
+	.retro-field-value {
+		@apply text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all;
+	}
+
+	/* Section Headers */
+	.retro-section-title {
+		@apply font-semibold text-retro-purple;
+	}
+
+	.retro-section-title-with-icon {
+		@apply font-semibold mr-retro-xl text-retro-purple;
+	}
+
+	/* Debug Containers */
+	.retro-debug-container {
+		@apply m-0 ml-retro-4xl p-retro-md pl-retro-xl bg-gray-50 border-2 border-dashed border-retro-border/30 rounded-retro-sm;
+	}
+
+	.retro-debug-text {
+		@apply text-retro-xs m-0 text-retro-muted whitespace-pre-wrap break-words;
+	}
+
+	/* Interactive Elements */
+	.retro-expand-link {
+		@apply text-retro-link cursor-pointer underline text-retro-sm font-mono transition-all duration-200 p-retro-xs bg-transparent hover:text-retro-text hover:bg-retro-highlight;
+	}
+
+	/* Register Context Styling */
+	.retro-register-section {
+		@apply m-0;
+	}
+
+	.retro-register-button {
+		@apply bg-transparent border-0 font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 hover:text-retro-highlight;
+	}
+
+	.retro-register-container {
+		@apply m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border/15;
+	}
+
+	.retro-register-row {
+		@apply flex m-0 p-0 leading-tight;
+	}
+
+	.retro-register-name {
+		@apply min-w-[60px] font-medium;
+	}
+
+	.retro-register-value {
+		@apply font-mono font-normal;
+	}
+
+	/* Trust Level Badges */
+	.retro-trust-badge {
+		@apply text-retro-xs font-semibold uppercase px-retro-md py-retro-xs rounded-retro-sm border;
+	}
+
+	.retro-trust-high {
+		@apply text-retro-green bg-retro-green/10 border-retro-green;
+	}
+
+	.retro-trust-medium-high {
+		@apply text-retro-orange bg-retro-orange/10 border-retro-orange;
+	}
+
+	.retro-trust-medium {
+		@apply text-yellow-700 bg-yellow-700/10 border-yellow-700;
+	}
+
+	.retro-trust-low {
+		@apply text-orange-700 bg-orange-700/10 border-orange-700;
+	}
+
+	.retro-trust-unknown {
+		@apply text-retro-muted bg-gray-500/10 border-retro-muted;
+	}
+
+	/* Stack Trace Styling */
+	.retro-stack-frame {
+		@apply flex items-start m-0 py-retro-sm px-0 border-b border-retro-border/5 leading-tight last:border-b-0;
+	}
+
+	.retro-stack-index {
+		@apply text-retro-muted min-w-retro-5xl font-semibold mr-retro-xl text-right;
+	}
+
+	.retro-stack-address {
+		@apply text-retro-text font-semibold font-mono;
+	}
+
+	.retro-stack-info {
+		@apply flex items-center gap-retro-xl flex-wrap;
+	}
+
+	/* Hex Dump Styling */
+	.retro-hex-container {
+		@apply font-mono text-retro-xs bg-gray-100 p-retro-md rounded-retro-sm border border-retro-border/10;
+	}
+
+	.retro-hex-line {
+		@apply text-retro-muted m-0 whitespace-pre leading-tight;
+	}
+
+	/* Utility Classes */
+	.retro-invalid-register {
+		@apply opacity-60;
+	}
+
+	.retro-flame-icon {
+		@apply text-red-600 inline-flex items-center justify-center ml-retro-xl;
+	}
+
+	/* List Item Containers */
+	.retro-list-item {
+		@apply m-0 rounded-retro-sm;
+	}
+
+	.retro-list-button {
+		@apply bg-transparent border-0 font-mono text-retro-sm text-retro-text cursor-pointer py-retro-sm px-0 flex items-center w-full text-left transition-all duration-200 hover:text-retro-purple;
+	}
+
+	.retro-list-content {
+		@apply m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-purple/15;
+	}
 }

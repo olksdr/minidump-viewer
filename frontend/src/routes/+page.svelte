@@ -1,207 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
-	import SystemInfo from '../components/SystemInfo.svelte';
-	import Exception from '../components/Exception.svelte';
-	import ThreadList from '../components/ThreadList.svelte';
-	import ModuleList from '../components/ModuleList.svelte';
-	import MemoryList from '../components/MemoryList.svelte';
+	import { SystemInfo, Exception, ThreadList, ModuleList, MemoryList } from '../lib';
+
+	// Import all shared types from the centralized types file
+	import type { MinidumpResult } from '../lib/types';
 
 	// WASM-related imports (will be loaded dynamically)
 	let parse_minidump: ((data: Uint8Array) => Promise<MinidumpResult>) | null = null;
-
-	// Type definition for raw system info fields
-	interface SystemInfoRaw {
-		processor_architecture?: number;
-		processor_level?: number;
-		processor_revision?: number;
-		number_of_processors?: number;
-		product_type?: number;
-		major_version?: number;
-		minor_version?: number;
-		build_number?: number;
-		platform_id?: number;
-		csd_version_rva?: number;
-		suite_mask?: number;
-		reserved2?: number;
-		cpu_info_data?: number[];
-		os_version?: string;
-		csd_version?: string;
-	}
-
-	// Type definition for structured system info
-	interface SystemInfoData {
-		os?: string;
-		cpu_info?: string;
-		raw?: SystemInfoRaw;
-		debug?: string;
-	}
-
-	// Type definition for exception record fields (nested inside MINIDUMP_EXCEPTION_STREAM)
-	interface ExceptionRecord {
-		exception_code: number;
-		exception_flags: number;
-		exception_record: number;
-		exception_address: number;
-		number_parameters: number;
-		exception_information: number[];
-	}
-
-	// Type definition for MINIDUMP_EXCEPTION_STREAM structure
-	interface ExceptionStreamRaw {
-		thread_id: number;
-		exception_record: ExceptionRecord;
-	}
-
-	// Type definition for CPU register
-	interface RegisterValue {
-		name: string;
-		value: number;
-		category: string;
-		valid: boolean;
-	}
-
-	// Type definition for structured CPU context
-	interface StructuredContext {
-		general_purpose: RegisterValue[];
-		instruction_pointer: RegisterValue[];
-		segment: RegisterValue[];
-		flags: RegisterValue[];
-		debug: RegisterValue[];
-		other: RegisterValue[];
-		architecture: string;
-	}
-
-	// Type definition for structured exception info
-	interface ExceptionData {
-		crash_reason?: string;
-		crash_address?: number;
-		thread_id: number;
-		context?: StructuredContext;
-		raw?: ExceptionStreamRaw;
-		debug?: string;
-		context_debug?: string;
-	}
-
-	// Type definition for stack info
-	interface StackInfo {
-		start_address: string;
-		memory_size: number;
-		memory_data: number[];
-	}
-
-	// Type definition for stack frame
-	interface StackFrame {
-		instruction_address: string;
-		trust_level: string;
-		module_name?: string;
-	}
-
-	// Type definition for thread data
-	interface ThreadData {
-		thread_id: number;
-		name?: string;
-		suspend_count: number;
-		priority_class: number;
-		priority: number;
-		teb: string;
-		stack?: StackInfo;
-		context?: StructuredContext;
-		stack_frames?: StackFrame[];
-		debug?: string;
-	}
-
-	// Type definition for module version information
-	interface VersionInfo {
-		file_version?: string;
-		product_version?: string;
-		file_flags?: string[];
-		file_type?: string;
-		file_os?: string;
-	}
-
-	// Type definition for module CodeView debug information
-	interface CodeViewInfo {
-		format: string;
-		identifier?: string;
-		age?: number;
-		pdb_filename?: string;
-	}
-
-	// Type definition for individual module information
-	interface ModuleInfo {
-		name: string;
-		base_of_image: string;
-		size_of_image: number;
-		checksum: number;
-		time_date_stamp: number;
-		version_info?: VersionInfo;
-		cv_record_info?: CodeViewInfo;
-		misc_record_present: boolean;
-	}
-
-	// Type definition for structured modules data
-	interface ModuleData {
-		modules: ModuleInfo[];
-		modules_count: number;
-		debug?: string;
-	}
-
-	// Type definition for memory region
-	interface MemoryRegion {
-		start_address: string;
-		end_address: string;
-		size: number;
-		size_formatted: string;
-		has_data: boolean;
-		data_size: number;
-		address_range: string;
-	}
-
-	// Type definition for memory info range
-	interface MemoryInfoRange {
-		base_address: string;
-		allocation_base: string;
-		region_size: number;
-		region_size_formatted: string;
-		state: string;
-		state_value: number;
-		protection: string;
-		protection_value: number;
-		allocation_protection: string;
-		allocation_protection_value: number;
-		memory_type: string;
-		memory_type_value: number;
-	}
-
-	// Type definition for memory range map
-	interface MemoryRangeMap {
-		ranges: MemoryInfoRange[];
-		ranges_count: number;
-	}
-
-	// Type definition for structured memory data
-	interface MemoryData {
-		regions: MemoryRegion[];
-		regions_count: number;
-		memory_info?: MemoryRangeMap;
-		has_memory_info_stream: boolean;
-		total_memory_size: number;
-		total_memory_size_formatted: string;
-		debug?: string;
-	}
-
-	// Type definition for the minidump parsing result
-	interface MinidumpResult {
-		streams_present?: string[];
-		modules_count?: number;
-		threads_count?: number;
-		system_info?: SystemInfoData;
-		exception_info?: ExceptionData;
-		threads_data?: ThreadData[];
-		modules_data?: ModuleData;
-		memory_data?: MemoryData;
-	}
 
 	// Reactive state for file processing
 	let isDragOver = false;
@@ -447,8 +253,8 @@
 							<div>
 								Streams:
 								{#if parsedResult.streams_present && parsedResult.streams_present.length > 0}
-									{@const streamsWithData = parsedResult.streams_present.filter((stream) =>
-										hasStreamData(stream, parsedResult)
+									{@const streamsWithData = parsedResult.streams_present.filter(
+										(stream) => parsedResult && hasStreamData(stream, parsedResult)
 									)}
 									{#if streamsWithData.length > 0}
 										{#each streamsWithData as stream, i}

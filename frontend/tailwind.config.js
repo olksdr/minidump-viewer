@@ -1,6 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 export default {
 	content: ['./src/**/*.{html,js,svelte,ts}'],
+	safelist: [
+		// Trust level badge classes that are dynamically generated
+		'retro-trust-high',
+		'retro-trust-medium-high',
+		'retro-trust-medium',
+		'retro-trust-low',
+		'retro-trust-unknown'
+	],
 	theme: {
 		extend: {
 			colors: {
