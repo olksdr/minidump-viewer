@@ -1,7 +1,12 @@
 <script lang="ts">
 	import RegisterContext from './RegisterContext.svelte';
 	import type { ExceptionData } from '../types';
-	import { formatAddress, getExceptionCodeName, getExceptionFlagsName } from '../utils';
+	import {
+		formatHexNoPadding,
+		stripHexPadding,
+		getExceptionCodeName,
+		getExceptionFlagsName
+	} from '../utils';
 	import { CollapsibleSection, FieldDisplay, DebugSection, ExpandableArray } from '..';
 
 	export let exceptionInfo: ExceptionData;
@@ -18,10 +23,14 @@
 		<FieldDisplay label="crash_reason" value={exceptionInfo.crash_reason} />
 	{/if}
 
-	<FieldDisplay label="thread_id" value={exceptionInfo.thread_id} formatter={formatAddress} />
+	<FieldDisplay label="thread_id" value={exceptionInfo.thread_id} formatter={formatHexNoPadding} />
 
 	{#if exceptionInfo.crash_address}
-		<FieldDisplay label="crash_address" value={exceptionInfo.crash_address} />
+		<FieldDisplay
+			label="crash_address"
+			value={exceptionInfo.crash_address}
+			formatter={stripHexPadding}
+		/>
 	{/if}
 
 	{#if exceptionInfo.raw?.exception_record}
@@ -38,6 +47,7 @@
 		<FieldDisplay
 			label="exception_address"
 			value={exceptionInfo.raw.exception_record.exception_address}
+			formatter={stripHexPadding}
 		/>
 	{/if}
 
@@ -57,7 +67,7 @@
 			<FieldDisplay
 				label="thread_id"
 				value={exceptionInfo.raw.thread_id}
-				formatter={formatAddress}
+				formatter={formatHexNoPadding}
 			/>
 
 			<!-- Exception Record nested section -->
@@ -65,6 +75,7 @@
 				<FieldDisplay
 					label="exception_record"
 					value={exceptionInfo.raw.exception_record.exception_record}
+					formatter={stripHexPadding}
 				/>
 				<FieldDisplay
 					label="number_parameters"

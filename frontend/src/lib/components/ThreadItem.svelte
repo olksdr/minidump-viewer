@@ -7,7 +7,8 @@
 		getPriorityClassName,
 		getTrustLevelStyle,
 		formatTrustLevel,
-		generateHexDump
+		generateHexDump,
+		formatHexNoPadding
 	} from '../utils';
 	import { CollapsibleSection, FieldDisplay, DebugSection } from '../index';
 
@@ -34,7 +35,7 @@
 		dispatch('toggle', { threadId: thread.thread_id });
 	}
 
-	$: threadTitle = `Thread 0x${thread.thread_id.toString(16).toLowerCase()} (${thread.name || '-'})`;
+	$: threadTitle = `Thread ${formatHexNoPadding(thread.thread_id)} (${thread.name || '-'})`;
 	$: threadSubtitle = `(suspended: ${thread.suspend_count}, priority: ${getPriorityClassName(thread.priority_class)})`;
 </script>
 
@@ -59,7 +60,7 @@
 	{#if expanded}
 		<div class="retro-list-content">
 			<!-- Basic thread info -->
-			<FieldDisplay label="thread_id" value="0x{thread.thread_id.toString(16).toLowerCase()}" />
+			<FieldDisplay label="thread_id" value={formatHexNoPadding(thread.thread_id)} />
 			<FieldDisplay label="name" value={thread.name || '-'} />
 			<FieldDisplay label="suspend_count" value={thread.suspend_count} />
 			<FieldDisplay

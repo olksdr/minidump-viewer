@@ -29,6 +29,25 @@ export function formatHex(value: number, padding: number = 8): string {
 }
 
 /**
+ * Formats a hex value with 0x prefix without padding
+ */
+export function formatHexNoPadding(value: number): string {
+	return `0x${value.toString(16).toLowerCase()}`;
+}
+
+/**
+ * Strips leading zeros from hex strings that are already formatted
+ */
+export function stripHexPadding(hexString: string | number | undefined | null): string {
+	if (hexString === undefined || hexString === null) return '-';
+	const str = String(hexString);
+	if (!str.startsWith('0x')) return str;
+	// Remove 0x prefix, strip leading zeros, add back 0x
+	const hex = str.slice(2).replace(/^0+/, '') || '0';
+	return `0x${hex}`;
+}
+
+/**
  * Formats a register value (already formatted as hex string from backend)
  */
 export function formatRegisterValue(value: string): string {
@@ -100,7 +119,7 @@ export function formatHexArrayValue(
 	previewItems: number = 6
 ): ArrayFormatResult {
 	return formatArrayValue(value, expanded, maxItems, previewItems, (v) =>
-		typeof v === 'string' ? v : `0x${v.toString(16).toLowerCase()}`
+		typeof v === 'string' ? v : formatHexNoPadding(Number(v))
 	);
 }
 
@@ -115,7 +134,7 @@ export function formatTimestamp(timestamp: number): string {
 		const date = new Date(timestamp * 1000);
 		return date.toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
 	} catch {
-		return `0x${timestamp.toString(16).toLowerCase()}`;
+		return formatHexNoPadding(timestamp);
 	}
 }
 
@@ -124,7 +143,7 @@ export function formatTimestamp(timestamp: number): string {
  */
 export function formatChecksum(checksum: number): string {
 	if (checksum === 0) return '-';
-	return `0x${checksum.toString(16).toLowerCase().padStart(8, '0')}`;
+	return formatHexNoPadding(checksum);
 }
 
 // === System Information Utilities ===
@@ -173,7 +192,7 @@ export function getPriorityClassName(priorityClass: number): string {
 		0x00004000: 'BELOW_NORMAL_PRIORITY_CLASS',
 		0x00008000: 'ABOVE_NORMAL_PRIORITY_CLASS'
 	};
-	return priorities[priorityClass] || `Unknown (0x${priorityClass.toString(16)})`;
+	return priorities[priorityClass] || `Unknown (${formatHexNoPadding(priorityClass)})`;
 }
 
 // === Trust Level Utilities ===
@@ -275,10 +294,10 @@ export function generateHexDump(data: number[], limit: number = 64): HexDumpResu
 
 	for (let i = 0; i < bytes.length; i += 16) {
 		const chunk = bytes.slice(i, i + 16);
-		const offset = i.toString(16).toLowerCase().padStart(4, '0');
+		const offset = i.toString(16).toLowerCase().padStart(8, '0');
 		const hex = chunk.map((b) => b.toString(16).toLowerCase().padStart(2, '0')).join(' ');
 		const ascii = chunk.map((b) => (b >= 32 && b < 127 ? String.fromCharCode(b) : '.')).join('');
-		lines.push(`${offset}  ${hex.padEnd(47)} |${ascii}|`);
+		lines.push(`${offset}  ${hex} |${ascii}|`);
 	}
 
 	return {
