@@ -1,4 +1,4 @@
-use crate::common::SafeU64;
+use crate::common::{SafeU64, debug_output};
 use crate::context::{StructuredContext, parse_context_registers};
 use minidump::{
     Minidump, MinidumpModuleList, MinidumpSystemInfo, MinidumpThreadList, MinidumpThreadNames,
@@ -93,7 +93,7 @@ pub async fn parse_threads_data_async<'a>(
             stack,
             context,
             stack_frames,
-            debug: Some(format!("{:#?}", thread)),
+            debug: debug_output(thread),
             stack_unwinding_method: unwinding_method,
         });
     }
@@ -250,33 +250,4 @@ fn find_module_for_address(modules: &MinidumpModuleList, address: u64) -> Option
         }
     }
     None
-}
-
-// Helper function for crash analysis - kept for future debugging needs
-#[allow(dead_code)]
-fn analyze_crash_pattern(_crash_ip: u64, frames: &[StackFrame]) -> String {
-    if frames.len() == 1 {
-        return "single frame (likely startup/main crash)".to_string();
-    }
-
-    if frames.len() == 2 {
-        // Check if this looks like a direct call from libc to main executable
-        if frames.len() >= 2 {
-            let frame0_is_main_exe = frames[0]
-                .module_name
-                .as_ref()
-                .is_some_and(|m| m.contains("crash") || m.contains("main") || !m.contains(".so"));
-            let frame1_is_libc = frames[1]
-                .module_name
-                .as_ref()
-                .is_some_and(|m| m.contains("libc"));
-
-            if frame0_is_main_exe && frame1_is_libc {
-                return "likely early crash in main() called from libc startup".to_string();
-            }
-        }
-        return "shallow call stack (early execution or leaf function crash)".to_string();
-    }
-
-    format!("{} frames (normal depth)", frames.len())
 }

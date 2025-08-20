@@ -1,3 +1,4 @@
+use crate::common::debug_output;
 use minidump::MinidumpSystemInfo;
 use serde::Serialize;
 
@@ -49,9 +50,12 @@ pub fn parse_system_info(system: &MinidumpSystemInfo) -> SystemInfoData {
             suite_mask: Some(system.raw.suite_mask),
             reserved2: Some(system.raw.reserved2),
             cpu_info_data: Some(system.raw.cpu.data.to_vec()),
-            os_version: system.csd_version().map(|v| v.to_string()),
+            os_version: Some(format!(
+                "{}.{}.{}",
+                system.raw.major_version, system.raw.minor_version, system.raw.build_number
+            )),
             csd_version: system.csd_version().map(|v| v.to_string()),
         }),
-        debug: Some(format!("{:#?}", system)),
+        debug: debug_output(system),
     }
 }

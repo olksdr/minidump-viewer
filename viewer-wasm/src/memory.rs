@@ -1,6 +1,8 @@
-use crate::common::SafeU64;
+use crate::common::{SafeU64, debug_output};
 use minidump::{MinidumpMemoryInfoList, UnifiedMemoryList};
 use serde::Serialize;
+use std::collections::HashMap;
+use std::sync::OnceLock;
 
 #[derive(Serialize)]
 pub struct MemoryData {
@@ -91,7 +93,7 @@ pub fn parse_memory_data(memory: &UnifiedMemoryList) -> MemoryData {
         has_memory_info_stream: false, // Will be set when memory info is available
         total_memory_size,
         total_memory_size_formatted,
-        debug: Some(format!("{:#?}", memory)),
+        debug: debug_output(memory),
     }
 }
 
@@ -165,19 +167,30 @@ fn format_memory_size(bytes: u64) -> String {
     }
 }
 
-// Parse memory state flags
-fn parse_memory_state(state: u32) -> (String, u32) {
-    let mut state_flags = Vec::<String>::new();
+// Optimized memory state parsing with lookup tables
+static STATE_FLAGS: OnceLock<Vec<(u32, &'static str)>> = OnceLock::new();
 
-    if state & 0x1000 != 0 {
-        state_flags.push("MEM_COMMIT".to_string());
-    }
-    if state & 0x2000 != 0 {
-        state_flags.push("MEM_RESERVE".to_string());
-    }
-    if state & 0x10000 != 0 {
-        state_flags.push("MEM_FREE".to_string());
-    }
+fn get_state_flags() -> &'static Vec<(u32, &'static str)> {
+    STATE_FLAGS.get_or_init(|| {
+        vec![
+            (0x1000, "MEM_COMMIT"),
+            (0x2000, "MEM_RESERVE"),
+            (0x10000, "MEM_FREE"),
+        ]
+    })
+}
+
+fn parse_memory_state(state: u32) -> (String, u32) {
+    let state_flags: Vec<String> = get_state_flags()
+        .iter()
+        .filter_map(|&(flag_bit, flag_name)| {
+            if state & flag_bit != 0 {
+                Some(flag_name.to_string())
+            } else {
+                None
+            }
+        })
+        .collect();
 
     let state_str = if state_flags.is_empty() {
         format!("UNKNOWN(0x{:x})", state)
@@ -188,57 +201,86 @@ fn parse_memory_state(state: u32) -> (String, u32) {
     (state_str, state)
 }
 
-// Parse memory protection flags
+// Optimized memory protection parsing with lookup tables
+static PROTECTION_FLAGS: OnceLock<HashMap<u32, &'static str>> = OnceLock::new();
+static PROTECTION_MODIFIERS: OnceLock<Vec<(u32, &'static str)>> = OnceLock::new();
+
+fn get_protection_flags() -> &'static HashMap<u32, &'static str> {
+    PROTECTION_FLAGS.get_or_init(|| {
+        let mut map = HashMap::new();
+        map.insert(0x01, "PAGE_NOACCESS");
+        map.insert(0x02, "PAGE_READONLY");
+        map.insert(0x04, "PAGE_READWRITE");
+        map.insert(0x08, "PAGE_WRITECOPY");
+        map.insert(0x10, "PAGE_EXECUTE");
+        map.insert(0x20, "PAGE_EXECUTE_READ");
+        map.insert(0x40, "PAGE_EXECUTE_READWRITE");
+        map.insert(0x80, "PAGE_EXECUTE_WRITECOPY");
+        map
+    })
+}
+
+fn get_protection_modifiers() -> &'static Vec<(u32, &'static str)> {
+    PROTECTION_MODIFIERS.get_or_init(|| {
+        vec![
+            (0x100, "PAGE_GUARD"),
+            (0x200, "PAGE_NOCACHE"),
+            (0x400, "PAGE_WRITECOMBINE"),
+        ]
+    })
+}
+
 fn parse_memory_protection(protection: u32) -> (String, u32) {
     if protection == 0 {
         return ("NONE".to_string(), 0);
     }
 
-    let mut protection_flags = Vec::<String>::new();
+    let mut protection_flags = Vec::new();
+    let protection_lookup = get_protection_flags();
 
     // Check basic protection flags
-    match protection & 0xFF {
-        0x01 => protection_flags.push("PAGE_NOACCESS".to_string()),
-        0x02 => protection_flags.push("PAGE_READONLY".to_string()),
-        0x04 => protection_flags.push("PAGE_READWRITE".to_string()),
-        0x08 => protection_flags.push("PAGE_WRITECOPY".to_string()),
-        0x10 => protection_flags.push("PAGE_EXECUTE".to_string()),
-        0x20 => protection_flags.push("PAGE_EXECUTE_READ".to_string()),
-        0x40 => protection_flags.push("PAGE_EXECUTE_READWRITE".to_string()),
-        0x80 => protection_flags.push("PAGE_EXECUTE_WRITECOPY".to_string()),
-        _ => {
-            protection_flags.push(format!("UNKNOWN(0x{:x})", protection & 0xFF));
-        }
+    let basic_protection = protection & 0xFF;
+    if let Some(&flag_name) = protection_lookup.get(&basic_protection) {
+        protection_flags.push(flag_name.to_string());
+    } else {
+        protection_flags.push(format!("UNKNOWN(0x{:x})", basic_protection));
     }
 
     // Check modifier flags
-    if protection & 0x100 != 0 {
-        protection_flags.push("PAGE_GUARD".to_string());
-    }
-    if protection & 0x200 != 0 {
-        protection_flags.push("PAGE_NOCACHE".to_string());
-    }
-    if protection & 0x400 != 0 {
-        protection_flags.push("PAGE_WRITECOMBINE".to_string());
+    for &(flag_bit, flag_name) in get_protection_modifiers() {
+        if protection & flag_bit != 0 {
+            protection_flags.push(flag_name.to_string());
+        }
     }
 
     let protection_str = protection_flags.join(" | ");
     (protection_str, protection)
 }
 
-// Parse memory type flags
-fn parse_memory_type(memory_type: u32) -> (String, u32) {
-    let mut type_flags = Vec::<String>::new();
+// Optimized memory type parsing with lookup tables
+static TYPE_FLAGS: OnceLock<Vec<(u32, &'static str)>> = OnceLock::new();
 
-    if memory_type & 0x20000 != 0 {
-        type_flags.push("MEM_PRIVATE".to_string());
-    }
-    if memory_type & 0x40000 != 0 {
-        type_flags.push("MEM_MAPPED".to_string());
-    }
-    if memory_type & 0x1000000 != 0 {
-        type_flags.push("MEM_IMAGE".to_string());
-    }
+fn get_type_flags() -> &'static Vec<(u32, &'static str)> {
+    TYPE_FLAGS.get_or_init(|| {
+        vec![
+            (0x20000, "MEM_PRIVATE"),
+            (0x40000, "MEM_MAPPED"),
+            (0x1000000, "MEM_IMAGE"),
+        ]
+    })
+}
+
+fn parse_memory_type(memory_type: u32) -> (String, u32) {
+    let type_flags: Vec<String> = get_type_flags()
+        .iter()
+        .filter_map(|&(flag_bit, flag_name)| {
+            if memory_type & flag_bit != 0 {
+                Some(flag_name.to_string())
+            } else {
+                None
+            }
+        })
+        .collect();
 
     let type_str = if type_flags.is_empty() {
         format!("UNKNOWN(0x{:x})", memory_type)

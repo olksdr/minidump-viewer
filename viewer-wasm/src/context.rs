@@ -1,6 +1,8 @@
 use crate::common::SafeU64;
 use minidump::{MinidumpContext, MinidumpRawContext};
 use serde::Serialize;
+use std::collections::HashMap;
+use std::sync::OnceLock;
 
 #[derive(Serialize)]
 pub struct RegisterValue {
@@ -49,15 +51,16 @@ pub fn parse_context_registers(context: &MinidumpContext) -> StructuredContext {
         let reg_name = name.to_string();
         let valid = valid_reg_names.contains(name);
 
+        let category = categorize_register(&reg_name);
         let register = RegisterValue {
             name: reg_name.clone(),
             value: value.into(),
             valid,
-            category: categorize_register(&reg_name),
+            category: category.clone(),
         };
 
-        // Categorize registers based on name patterns
-        match categorize_register(&reg_name).as_str() {
+        // Push to appropriate category vector
+        match category.as_str() {
             "general_purpose" => general_purpose.push(register),
             "instruction_pointer" => instruction_pointer.push(register),
             "segment" => segment.push(register),
@@ -78,26 +81,53 @@ pub fn parse_context_registers(context: &MinidumpContext) -> StructuredContext {
     }
 }
 
-// Helper function to categorize registers by name
-fn categorize_register(name: &str) -> String {
-    match name.to_lowercase().as_str() {
+// Optimized register categorization using static lookup table
+static REGISTER_CATEGORIES: OnceLock<HashMap<&'static str, &'static str>> = OnceLock::new();
+
+fn get_register_categories() -> &'static HashMap<&'static str, &'static str> {
+    REGISTER_CATEGORIES.get_or_init(|| {
+        let mut map = HashMap::new();
+
         // General purpose registers (AMD64/x86)
-        "rax" | "rbx" | "rcx" | "rdx" | "rsi" | "rdi" | "rsp" | "rbp" | "r8" | "r9" | "r10"
-        | "r11" | "r12" | "r13" | "r14" | "r15" | "eax" | "ebx" | "ecx" | "edx" | "esi" | "edi"
-        | "esp" | "ebp" => "general_purpose".to_string(),
+        for reg in &[
+            "rax", "rbx", "rcx", "rdx", "rsi", "rdi", "rsp", "rbp", "r8", "r9", "r10", "r11",
+            "r12", "r13", "r14", "r15", "eax", "ebx", "ecx", "edx", "esi", "edi", "esp", "ebp",
+        ] {
+            map.insert(*reg, "general_purpose");
+        }
 
         // Instruction pointer
-        "rip" | "eip" | "pc" => "instruction_pointer".to_string(),
+        for reg in &["rip", "eip", "pc"] {
+            map.insert(*reg, "instruction_pointer");
+        }
 
         // Segment registers
-        "cs" | "ds" | "es" | "fs" | "gs" | "ss" => "segment".to_string(),
+        for reg in &["cs", "ds", "es", "fs", "gs", "ss"] {
+            map.insert(*reg, "segment");
+        }
 
         // Flags registers
-        "eflags" | "rflags" | "context_flags" | "cpsr" => "flags".to_string(),
+        for reg in &["eflags", "rflags", "context_flags", "cpsr"] {
+            map.insert(*reg, "flags");
+        }
 
-        // Debug registers
-        name if name.starts_with("dr") => "debug".to_string(),
+        map
+    })
+}
 
-        _ => "other".to_string(),
+fn categorize_register(name: &str) -> String {
+    let lower_name = name.to_lowercase();
+    let categories = get_register_categories();
+
+    // Check static lookup first
+    if let Some(&category) = categories.get(lower_name.as_str()) {
+        return category.to_string();
     }
+
+    // Handle debug registers (dynamic pattern)
+    if lower_name.starts_with("dr") {
+        return "debug".to_string();
+    }
+
+    "other".to_string()
 }

@@ -1,4 +1,4 @@
-use crate::common::format_hex_u64;
+use crate::common::{SafeU64, debug_output};
 use minidump::MinidumpModuleList;
 use serde::Serialize;
 
@@ -39,39 +39,45 @@ pub struct CodeViewInfo {
 }
 
 pub fn parse_modules_data(modules: &MinidumpModuleList) -> ModuleData {
-    let mut parsed_modules = Vec::new();
+    let parsed_modules = modules
+        .iter()
+        .map(|module| {
+            let name = module.name.clone();
+            let base_of_image = SafeU64::from(module.raw.base_of_image)
+                .to_hex_string()
+                .to_string();
+            let raw = &module.raw;
 
-    for module in modules.iter() {
-        // Get basic module info
-        let name = module.name.clone();
-        let base_of_image = format_hex_u64(module.raw.base_of_image);
-        let size_of_image = module.raw.size_of_image;
-        let raw = &module.raw;
-
-        // Parse version information from raw fields
-        let version_info = parse_version_info(&raw.version_info);
-
-        // Parse CodeView information
-        let cv_record_info = module.codeview_info.as_ref().and_then(parse_codeview_info);
-
-        let module_info = ModuleInfo {
-            name,
-            base_of_image,
-            size_of_image,
-            checksum: raw.checksum,
-            time_date_stamp: raw.time_date_stamp,
-            version_info,
-            cv_record_info,
-            misc_record_present: raw.misc_record.data_size > 0,
-        };
-
-        parsed_modules.push(module_info);
-    }
+            ModuleInfo {
+                name,
+                base_of_image,
+                size_of_image: raw.size_of_image,
+                checksum: raw.checksum,
+                time_date_stamp: raw.time_date_stamp,
+                version_info: parse_version_info(&raw.version_info),
+                cv_record_info: module.codeview_info.as_ref().and_then(parse_codeview_info),
+                misc_record_present: raw.misc_record.data_size > 0,
+            }
+        })
+        .collect();
 
     ModuleData {
         modules: parsed_modules,
         modules_count: modules.iter().count(),
-        debug: Some(format!("{:#?}", modules)),
+        debug: debug_output(modules),
+    }
+}
+
+// Helper function to format version from high and low parts
+fn format_version(version_hi: u32, version_lo: u32) -> Option<String> {
+    if version_hi != 0 || version_lo != 0 {
+        let major = (version_hi >> 16) & 0xFFFF;
+        let minor = version_hi & 0xFFFF;
+        let build = (version_lo >> 16) & 0xFFFF;
+        let revision = version_lo & 0xFFFF;
+        Some(format!("{}.{}.{}.{}", major, minor, build, revision))
+    } else {
+        None
     }
 }
 
@@ -82,28 +88,11 @@ fn parse_version_info(version_info: &minidump::format::VS_FIXEDFILEINFO) -> Opti
         return None;
     }
 
-    // Format file version using correct field names
-    let file_version = if version_info.file_version_hi != 0 || version_info.file_version_lo != 0 {
-        let major = (version_info.file_version_hi >> 16) & 0xFFFF;
-        let minor = version_info.file_version_hi & 0xFFFF;
-        let build = (version_info.file_version_lo >> 16) & 0xFFFF;
-        let revision = version_info.file_version_lo & 0xFFFF;
-        Some(format!("{}.{}.{}.{}", major, minor, build, revision))
-    } else {
-        None
-    };
-
-    // Format product version using correct field names
-    let product_version =
-        if version_info.product_version_hi != 0 || version_info.product_version_lo != 0 {
-            let major = (version_info.product_version_hi >> 16) & 0xFFFF;
-            let minor = version_info.product_version_hi & 0xFFFF;
-            let build = (version_info.product_version_lo >> 16) & 0xFFFF;
-            let revision = version_info.product_version_lo & 0xFFFF;
-            Some(format!("{}.{}.{}.{}", major, minor, build, revision))
-        } else {
-            None
-        };
+    let file_version = format_version(version_info.file_version_hi, version_info.file_version_lo);
+    let product_version = format_version(
+        version_info.product_version_hi,
+        version_info.product_version_lo,
+    );
 
     // Parse file flags
     let file_flags = parse_file_flags(version_info.file_flags);
