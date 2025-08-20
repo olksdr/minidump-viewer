@@ -2,7 +2,7 @@
 	import type { ArrayFormatResult } from '../types';
 	import { formatArrayValue, formatHexArrayValue } from '../utils';
 
-	export let values: number[] | undefined;
+	export let values: (number | string)[] | undefined;
 	export let expanded: boolean = false;
 	export let maxItems: number = 8;
 	export let previewItems: number = 6;

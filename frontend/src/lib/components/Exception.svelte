@@ -21,11 +21,7 @@
 	<FieldDisplay label="thread_id" value={exceptionInfo.thread_id} formatter={formatAddress} />
 
 	{#if exceptionInfo.crash_address}
-		<FieldDisplay
-			label="crash_address"
-			value={exceptionInfo.crash_address}
-			formatter={formatAddress}
-		/>
+		<FieldDisplay label="crash_address" value={exceptionInfo.crash_address} />
 	{/if}
 
 	{#if exceptionInfo.raw?.exception_record}
@@ -42,7 +38,6 @@
 		<FieldDisplay
 			label="exception_address"
 			value={exceptionInfo.raw.exception_record.exception_address}
-			formatter={formatAddress}
 		/>
 	{/if}
 
@@ -70,7 +65,6 @@
 				<FieldDisplay
 					label="exception_record"
 					value={exceptionInfo.raw.exception_record.exception_record}
-					formatter={formatAddress}
 				/>
 				<FieldDisplay
 					label="number_parameters"

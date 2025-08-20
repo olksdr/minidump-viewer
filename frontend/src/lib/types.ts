@@ -4,7 +4,7 @@
 // === Core Register and Context Types ===
 export interface RegisterValue {
 	name: string;
-	value: number;
+	value: string;
 	category: string;
 	valid: boolean;
 }
@@ -49,10 +49,10 @@ export interface SystemInfoData {
 export interface ExceptionRecord {
 	exception_code: number;
 	exception_flags: number;
-	exception_record: number;
-	exception_address: number;
+	exception_record: string; // SafeU64 -> string
+	exception_address: string; // SafeU64 -> string
 	number_parameters: number;
-	exception_information: number[];
+	exception_information: string[]; // Vec<SafeU64> -> string[]
 }
 
 export interface ExceptionStreamRaw {
@@ -62,7 +62,7 @@ export interface ExceptionStreamRaw {
 
 export interface ExceptionData {
 	crash_reason?: string;
-	crash_address?: number;
+	crash_address?: string; // SafeU64 -> string
 	thread_id: number;
 	context?: StructuredContext;
 	raw?: ExceptionStreamRaw;

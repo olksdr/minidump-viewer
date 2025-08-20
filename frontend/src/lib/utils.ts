@@ -29,10 +29,10 @@ export function formatHex(value: number, padding: number = 8): string {
 }
 
 /**
- * Formats a register value as 16-character hex
+ * Formats a register value (already formatted as hex string from backend)
  */
-export function formatRegisterValue(value: number): string {
-	return `0x${value.toString(16).toLowerCase().padStart(16, '0')}`;
+export function formatRegisterValue(value: string): string {
+	return value;
 }
 
 // === Size Formatting Utilities ===
@@ -63,11 +63,11 @@ export function formatMemorySize(size: number): string {
  * Formats an array with truncation and expansion controls
  */
 export function formatArrayValue(
-	value: number[] | undefined,
+	value: (number | string)[] | undefined,
 	expanded: boolean,
 	maxItems: number = 8,
 	previewItems: number = 6,
-	formatter: (v: number) => string = (v) => String(v)
+	formatter: (v: number | string) => string = (v) => String(v)
 ): ArrayFormatResult {
 	if (!value || value.length === 0) {
 		return { text: '-', hasMore: false, fullLength: 0 };
@@ -94,17 +94,13 @@ export function formatArrayValue(
  * Formats hex array values specifically
  */
 export function formatHexArrayValue(
-	value: number[] | undefined,
+	value: (number | string)[] | undefined,
 	expanded: boolean,
 	maxItems: number = 8,
 	previewItems: number = 6
 ): ArrayFormatResult {
-	return formatArrayValue(
-		value,
-		expanded,
-		maxItems,
-		previewItems,
-		(v) => `0x${v.toString(16).toLowerCase()}`
+	return formatArrayValue(value, expanded, maxItems, previewItems, (v) =>
+		typeof v === 'string' ? v : `0x${v.toString(16).toLowerCase()}`
 	);
 }
 
