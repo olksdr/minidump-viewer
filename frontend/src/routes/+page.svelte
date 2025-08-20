@@ -407,7 +407,7 @@
 				type="file"
 				accept=".dmp,.mdmp"
 				on:change={handleFileInput}
-				style="display: inline; font-family: inherit; font-size: 11px;"
+				class="inline font-inherit text-retro-sm"
 			/>
 		</div>
 		<div class="retro-dropzone-subtext">All parsing happens locally in your browser.</div>
@@ -441,11 +441,9 @@
 					</span>
 				</div>
 				<div class="retro-content">
-					<div
-						style="display: flex; gap: 1rem; align-items: flex-start; width: 100%; max-width: 100%; overflow: hidden; box-sizing: border-box;"
-					>
+					<div class="flex gap-4 items-start w-full max-w-full overflow-hidden box-border">
 						<!-- Overview Panel (15%) -->
-						<div style="flex: 0 0 15%; min-width: 0; max-width: 15%; overflow: hidden;">
+						<div class="flex-[0_0_15%] min-w-0 max-w-[15%] overflow-hidden">
 							<div>
 								Streams:
 								{#if parsedResult.streams_present && parsedResult.streams_present.length > 0}
@@ -485,7 +483,7 @@
 						</div>
 
 						<!-- System Panel (takes remaining space) -->
-						<div style="flex: 1; min-width: 0; overflow: hidden; white-space: normal;">
+						<div class="flex-1 min-w-0 overflow-hidden whitespace-normal">
 							{#if parsedResult.system_info}
 								<SystemInfo systemInfo={parsedResult.system_info} />
 							{:else}

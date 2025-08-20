@@ -82,95 +82,195 @@
 	}
 </script>
 
-<div class="system-info">
-	<div class="system-field">
-		<span class="field-name">os:</span>
-		<span class="field-value">{formatValue(systemInfo.os)}</span>
+<div
+	class="font-mono text-retro-sm leading-tight w-full max-w-full overflow-hidden box-border whitespace-normal"
+>
+	<div class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight">
+		<span
+			class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+			>os:</span
+		>
+		<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+			>{formatValue(systemInfo.os)}</span
+		>
 	</div>
 
-	<div class="system-field">
-		<span class="field-name">version:</span>
-		<span class="field-value">{getOSVersion(systemInfo.raw)}</span>
+	<div class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight">
+		<span
+			class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+			>version:</span
+		>
+		<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+			>{getOSVersion(systemInfo.raw)}</span
+		>
 	</div>
 
-	<div class="system-field">
-		<span class="field-name">processor_architecture:</span>
-		<span class="field-value"
+	<div class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight">
+		<span
+			class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+			>processor_architecture:</span
+		>
+		<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
 			>{getProcessorArchitectureName(systemInfo.raw?.processor_architecture)}</span
 		>
 	</div>
 
-	<div class="system-field">
-		<span class="field-name">number_of_processors:</span>
-		<span class="field-value">{formatValue(systemInfo.raw?.number_of_processors)}</span>
+	<div class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight">
+		<span
+			class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+			>number_of_processors:</span
+		>
+		<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+			>{formatValue(systemInfo.raw?.number_of_processors)}</span
+		>
 	</div>
 
 	{#if systemInfo.cpu_info}
-		<div class="system-field">
-			<span class="field-name">cpu_info:</span>
-			<span class="field-value">{systemInfo.cpu_info}</span>
+		<div class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight">
+			<span
+				class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+				>cpu_info:</span
+			>
+			<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+				>{systemInfo.cpu_info}</span
+			>
 		</div>
 	{/if}
 
 	<!-- Collapsible Raw Data -->
 	{#if systemInfo.raw}
-		<div class="collapsible-section">
-			<button class="toggle-button" on:click={() => (rawExpanded = !rawExpanded)}>
-				<span class="toggle-icon">{rawExpanded ? '-' : '+'}</span>
-				<span class="section-title">raw</span>
+		<div class="m-0 rounded-sm">
+			<button
+				class="bg-transparent border-0 font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 ease-in-out hover:text-retro-purple"
+				on:click={() => (rawExpanded = !rawExpanded)}
+			>
+				<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+					>{rawExpanded ? '-' : '+'}</span
+				>
+				<span class="text-retro-text font-medium">raw</span>
 			</button>
 
 			{#if rawExpanded}
-				<div class="expanded-content">
-					<div class="system-field">
-						<span class="field-name">processor_level:</span>
-						<span class="field-value">{formatValue(systemInfo.raw.processor_level)}</span>
+				<div
+					class="m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border/15 overflow-hidden break-words max-w-[calc(100%-24px)] box-border"
+				>
+					<div
+						class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+					>
+						<span
+							class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+							>processor_level:</span
+						>
+						<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+							>{formatValue(systemInfo.raw.processor_level)}</span
+						>
 					</div>
-					<div class="system-field">
-						<span class="field-name">processor_revision:</span>
-						<span class="field-value">{formatValue(systemInfo.raw.processor_revision)}</span>
+					<div
+						class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+					>
+						<span
+							class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+							>processor_revision:</span
+						>
+						<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+							>{formatValue(systemInfo.raw.processor_revision)}</span
+						>
 					</div>
-					<div class="system-field">
-						<span class="field-name">product_type:</span>
-						<span class="field-value">{formatValue(systemInfo.raw.product_type)}</span>
+					<div
+						class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+					>
+						<span
+							class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+							>product_type:</span
+						>
+						<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+							>{formatValue(systemInfo.raw.product_type)}</span
+						>
 					</div>
-					<div class="system-field">
-						<span class="field-name">platform_id:</span>
-						<span class="field-value">{formatValue(systemInfo.raw.platform_id)}</span>
+					<div
+						class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+					>
+						<span
+							class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+							>platform_id:</span
+						>
+						<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+							>{formatValue(systemInfo.raw.platform_id)}</span
+						>
 					</div>
-					<div class="system-field">
-						<span class="field-name">suite_mask:</span>
-						<span class="field-value">{formatValue(systemInfo.raw.suite_mask)}</span>
+					<div
+						class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+					>
+						<span
+							class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+							>suite_mask:</span
+						>
+						<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+							>{formatValue(systemInfo.raw.suite_mask)}</span
+						>
 					</div>
-					<div class="system-field">
-						<span class="field-name">csd_version_rva:</span>
-						<span class="field-value">{formatValue(systemInfo.raw.csd_version_rva)}</span>
+					<div
+						class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+					>
+						<span
+							class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+							>csd_version_rva:</span
+						>
+						<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+							>{formatValue(systemInfo.raw.csd_version_rva)}</span
+						>
 					</div>
-					<div class="system-field">
-						<span class="field-name">reserved2:</span>
-						<span class="field-value">{formatValue(systemInfo.raw.reserved2)}</span>
+					<div
+						class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+					>
+						<span
+							class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+							>reserved2:</span
+						>
+						<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+							>{formatValue(systemInfo.raw.reserved2)}</span
+						>
 					</div>
 					{#if systemInfo.raw.os_version}
-						<div class="system-field">
-							<span class="field-name">os_version:</span>
-							<span class="field-value">{systemInfo.raw.os_version}</span>
+						<div
+							class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+						>
+							<span
+								class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+								>os_version:</span
+							>
+							<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+								>{systemInfo.raw.os_version}</span
+							>
 						</div>
 					{/if}
 					{#if systemInfo.raw.csd_version}
-						<div class="system-field">
-							<span class="field-name">csd_version:</span>
-							<span class="field-value">{systemInfo.raw.csd_version}</span>
+						<div
+							class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+						>
+							<span
+								class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+								>csd_version:</span
+							>
+							<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all"
+								>{systemInfo.raw.csd_version}</span
+							>
 						</div>
 					{/if}
 					{#if systemInfo.raw.cpu_info_data}
 						{@const arrayData = formatArrayValue(systemInfo.raw.cpu_info_data, cpuDataExpanded)}
-						<div class="system-field">
-							<span class="field-name">cpu_info_data:</span>
-							<span class="field-value">
+						<div
+							class="flex m-0 p-0 pl-retro-4xl max-w-full overflow-hidden box-border leading-tight"
+						>
+							<span
+								class="text-retro-purple min-w-[180px] max-w-[180px] font-medium flex-shrink-0 overflow-hidden text-ellipsis after:content-[' ']"
+								>cpu_info_data:</span
+							>
+							<span class="text-retro-text flex-1 min-w-0 overflow-hidden break-words break-all">
 								{arrayData.text}
 								{#if arrayData.hasMore}
 									<span
-										class="array-toggle"
+										class="text-retro-link cursor-pointer underline text-retro-sm font-mono transition-all duration-200 ease-in-out p-retro-xs bg-transparent hover:text-retro-text hover:bg-retro-highlight"
 										on:click={() => (cpuDataExpanded = true)}
 										on:keydown={(e) => e.key === 'Enter' && (cpuDataExpanded = true)}
 										role="button"
@@ -180,7 +280,7 @@
 									</span>
 								{:else if cpuDataExpanded && arrayData.fullLength > 10}
 									<span
-										class="array-toggle"
+										class="text-retro-link cursor-pointer underline text-retro-sm font-mono transition-all duration-200 ease-in-out p-retro-xs bg-transparent hover:text-retro-text hover:bg-retro-highlight"
 										on:click={() => (cpuDataExpanded = false)}
 										on:keydown={(e) => e.key === 'Enter' && (cpuDataExpanded = false)}
 										role="button"
@@ -199,149 +299,25 @@
 
 	<!-- Collapsible Debug Data -->
 	{#if systemInfo.debug}
-		<div class="collapsible-section">
-			<button class="toggle-button" on:click={() => (debugExpanded = !debugExpanded)}>
-				<span class="toggle-icon">{debugExpanded ? '-' : '+'}</span>
-				<span class="section-title">debug</span>
+		<div class="m-0 rounded-sm">
+			<button
+				class="bg-transparent border-0 font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 ease-in-out hover:text-retro-purple"
+				on:click={() => (debugExpanded = !debugExpanded)}
+			>
+				<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+					>{debugExpanded ? '-' : '+'}</span
+				>
+				<span class="text-retro-text font-medium">debug</span>
 			</button>
 
 			{#if debugExpanded}
-				<div class="expanded-content raw-content">
-					<pre>{systemInfo.debug}</pre>
+				<div
+					class="m-0 ml-retro-4xl p-retro-md pl-retro-xl bg-gray-50 border-2 border-dashed border-retro-border/30 overflow-hidden break-words max-w-[calc(100%-24px)] box-border rounded-retro-sm"
+				>
+					<pre
+						class="text-retro-xs m-0 text-retro-muted whitespace-pre-wrap break-all break-words max-w-full overflow-hidden box-border">{systemInfo.debug}</pre>
 				</div>
 			{/if}
 		</div>
 	{/if}
 </div>
-
-<style>
-	.system-info {
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 11px;
-		line-height: 1.2;
-		width: 100%;
-		max-width: 100%;
-		overflow: hidden;
-		box-sizing: border-box;
-		white-space: normal;
-	}
-
-	.system-field {
-		display: flex;
-		margin: 0;
-		padding: 0;
-		padding-left: 16px;
-		max-width: 100%;
-		overflow: hidden;
-		box-sizing: border-box;
-		line-height: 1.2;
-	}
-
-	.field-name {
-		color: var(--retro-accent);
-		min-width: 180px;
-		max-width: 180px;
-		font-weight: 500;
-		flex-shrink: 0;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.field-name::after {
-		content: ' ';
-	}
-
-	.field-value {
-		color: var(--retro-text);
-		flex: 1;
-		min-width: 0;
-		overflow: hidden;
-		word-wrap: break-word;
-		word-break: break-all;
-	}
-
-	.collapsible-section {
-		margin: 0;
-		border-radius: 2px;
-	}
-
-	.toggle-button {
-		background: none;
-		border: none;
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 11px;
-		color: var(--retro-text);
-		cursor: pointer;
-		padding: 0;
-		display: flex;
-		align-items: center;
-		width: 100%;
-		text-align: left;
-		transition: all 0.2s ease;
-	}
-
-	.toggle-button:hover {
-		color: var(--retro-accent);
-	}
-
-	.toggle-icon {
-		color: var(--retro-link);
-		margin-right: 4px;
-		font-weight: 700;
-		text-decoration: underline;
-		min-width: 12px;
-		text-align: center;
-	}
-
-	.section-title {
-		color: var(--retro-text);
-		font-weight: 500;
-	}
-
-	.expanded-content {
-		margin: 0;
-		margin-left: 16px;
-		padding: 0;
-		padding-left: 8px;
-		background: transparent;
-		border-left: 2px solid rgba(74, 144, 164, 0.15);
-		overflow: hidden;
-		word-wrap: break-word;
-		max-width: calc(100% - 24px);
-		box-sizing: border-box;
-	}
-
-	.raw-content {
-		background: rgba(0, 0, 0, 0.02);
-		max-width: 100%;
-		overflow: hidden;
-	}
-
-	.raw-content pre {
-		font-size: 10px;
-		margin: 0;
-		color: var(--retro-muted);
-		white-space: pre-wrap;
-		word-break: break-all;
-		overflow-wrap: break-word;
-		max-width: 100%;
-		overflow: hidden;
-		box-sizing: border-box;
-	}
-
-	.array-toggle {
-		color: var(--retro-link);
-		cursor: pointer;
-		text-decoration: underline;
-		font-size: 11px;
-		font-family: 'JetBrains Mono', monospace;
-		transition: all 0.2s ease;
-		padding: 1px 2px;
-		background: transparent;
-	}
-
-	.array-toggle:hover {
-		color: var(--retro-text);
-		background: var(--retro-highlight);
-	}
-</style>

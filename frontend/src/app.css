@@ -21,215 +21,111 @@
 	--retro-error-border: #fecaca;
 }
 
-body {
-	font-family: 'JetBrains Mono', monospace;
-	background-color: var(--retro-bg);
-	color: var(--retro-text);
-	font-size: 13px;
-	line-height: 1.4;
+@layer base {
+	body {
+		@apply font-mono bg-retro-bg text-retro-text text-retro-lg leading-tight;
+	}
 }
 
-.retro-container {
-	max-width: 100%;
-	padding: 8px;
-}
+@layer components {
+	.retro-container {
+		@apply w-full p-retro-xl;
+	}
 
-/* Landing Page Layout - Large Centered Logo */
-.retro-landing {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	margin-bottom: 24px;
-	padding: 16px 0;
-}
+	.retro-landing {
+		@apply flex flex-col items-center justify-center mb-retro-5xl py-retro-4xl;
+	}
 
-.retro-logo-large {
-	width: 640px;
-	height: 360px;
-	object-fit: contain;
-	margin-bottom: 16px;
-	border-radius: 8px;
-	/* Remove box-shadow to preserve transparent background */
-}
+	.retro-logo-large {
+		@apply w-[640px] h-[360px] object-contain mb-retro-4xl rounded-retro-lg;
+	}
 
-.retro-title-large {
-	font-size: 23px;
-	font-weight: 500;
-	margin: 0;
-	color: var(--retro-purple);
-	letter-spacing: 1px;
-	text-align: center;
-}
+	.retro-title-large {
+		@apply text-retro-2xl font-medium m-0 text-retro-purple tracking-wide text-center;
+	}
 
-/* Compact Header Layout - Small Corner Logo */
-.retro-header-compact {
-	display: flex;
-	align-items: center;
-	justify-content: flex-start;
-	gap: 12px;
-	margin-bottom: 12px;
-	padding: 8px 0;
-}
+	.retro-header-compact {
+		@apply flex items-center justify-start gap-retro-3xl mb-retro-3xl py-retro-xl;
+	}
 
-.retro-logo-compact {
-	width: 144px;
-	height: 81px;
-	object-fit: contain;
-	border-radius: 4px;
-	/* Remove box-shadow to preserve transparent background */
-}
+	.retro-logo-compact {
+		@apply w-36 h-[81px] object-contain rounded-retro;
+	}
 
-.retro-title-compact {
-	font-size: 15px;
-	font-weight: 500;
-	margin: 0;
-	color: var(--retro-purple);
-	letter-spacing: 0.5px;
-}
+	.retro-title-compact {
+		@apply text-retro-xl font-medium m-0 text-retro-purple tracking-wide;
+	}
 
-.retro-haiku {
-	font-family: 'JetBrains Mono', monospace;
-	font-size: 11px;
-	color: var(--retro-muted);
-	line-height: 1.3;
-	text-align: left;
-	font-style: italic;
-	margin-left: 8px;
-}
+	.retro-haiku {
+		@apply font-mono text-retro-sm text-retro-muted leading-snug text-left italic ml-retro-xl;
+	}
 
-.retro-section {
-	margin-bottom: 8px;
-	border: 1px solid var(--retro-border);
-	background: #fdfdfd;
-}
+	.retro-section {
+		@apply mb-retro-xl border border-retro-border bg-[#fdfdfd];
+	}
 
-.retro-section-header {
-	font-size: 12px;
-	font-weight: 500;
-	padding: 6px 10px;
-	background: var(--retro-highlight);
-	border-bottom: 1px solid var(--retro-border);
-	color: var(--retro-text);
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
+	.retro-section-header {
+		@apply text-retro-base font-medium py-retro-lg px-retro-2xl bg-retro-highlight border-b border-retro-border text-retro-text uppercase tracking-wide flex justify-between items-center;
+	}
 
-.retro-content {
-	padding: 6px 8px;
-	font-size: 11px;
-	line-height: 1.3;
-	white-space: pre-wrap;
-	font-family: 'JetBrains Mono', monospace;
-	color: var(--retro-text);
-}
+	.retro-content {
+		@apply p-retro-lg text-retro-sm leading-snug whitespace-pre-wrap font-mono text-retro-text;
+	}
 
-.retro-dropzone {
-	border: 2px dashed var(--retro-border);
-	padding: 16px;
-	text-align: center;
-	background: #fafafa;
-	margin-bottom: 12px;
-	transition: all 0.2s ease;
-}
+	.retro-dropzone {
+		@apply border-2 border-dashed border-retro-border p-retro-4xl text-center bg-[#fafafa] mb-retro-3xl transition-all duration-200;
+	}
 
-.retro-dropzone:hover,
-.retro-dropzone.drag-over {
-	border-color: var(--retro-lime);
-	background: #f5f5f5;
-}
+	.retro-dropzone:hover,
+	.retro-dropzone.drag-over {
+		@apply border-retro-lime bg-[#f5f5f5];
+	}
 
-.retro-dropzone-text {
-	font-size: 12px;
-	margin-bottom: 4px;
-	color: var(--retro-text);
-}
+	.retro-dropzone-text {
+		@apply text-retro-base mb-retro-md text-retro-text;
+	}
 
-.retro-dropzone-subtext {
-	font-size: 10px;
-	color: var(--retro-muted);
-}
+	.retro-dropzone-subtext {
+		@apply text-retro-xs text-retro-muted;
+	}
 
-.retro-code {
-	background: var(--retro-highlight);
-	padding: 1px 3px;
-	font-family: 'JetBrains Mono', monospace;
-	font-size: 11px;
-	color: var(--retro-purple);
-	font-weight: 500;
-}
+	.retro-code {
+		@apply bg-retro-highlight px-1 py-px font-mono text-retro-sm text-retro-purple font-medium;
+	}
 
-.retro-link {
-	color: var(--retro-link);
-	text-decoration: underline;
-	cursor: pointer;
-	font-family: 'JetBrains Mono', monospace;
-	font-size: 11px;
-	font-weight: 700;
-	transition: all 0.2s ease;
-	padding: 1px 2px;
-	background: transparent;
-}
+	.retro-link {
+		@apply text-retro-link underline cursor-pointer font-mono text-retro-sm font-bold transition-all duration-200 px-px py-px bg-transparent;
+	}
 
-.retro-link:hover {
-	color: var(--retro-text);
-	background: var(--retro-highlight);
-}
+	.retro-link:hover {
+		@apply text-retro-text bg-retro-highlight;
+	}
 
-.retro-muted {
-	color: var(--retro-muted);
-}
+	.retro-muted {
+		@apply text-retro-muted;
+	}
 
-.retro-scroll-top {
-	color: var(--retro-link);
-	cursor: pointer;
-	font-family: 'JetBrains Mono', monospace;
-	font-size: 12px;
-	font-weight: 700;
-	text-decoration: underline;
-	transition: all 0.2s ease;
-	user-select: none;
-	padding: 2px 4px;
-	border-radius: 2px;
-	background: transparent;
-}
+	.retro-scroll-top {
+		@apply text-retro-link cursor-pointer font-mono text-retro-base font-bold underline transition-all duration-200 select-none px-retro-md py-retro-sm rounded-retro-sm bg-transparent;
+	}
 
-.retro-scroll-top:hover {
-	color: var(--retro-text);
-	background: var(--retro-bg);
-}
+	.retro-scroll-top:hover {
+		@apply text-retro-text bg-retro-bg;
+	}
 
-.retro-error {
-	border: 2px dashed var(--retro-error-border);
-	background: var(--retro-error);
-	padding: 12px;
-	margin: 12px 0;
-	border-radius: 4px;
-	font-family: 'JetBrains Mono', monospace;
-	color: var(--retro-error-text);
-	font-size: 12px;
-	line-height: 1.4;
-}
+	.retro-error {
+		@apply border-2 border-dashed border-retro-error-border bg-retro-error p-retro-3xl my-retro-3xl rounded-retro font-mono text-retro-error-text text-retro-base leading-tight;
+	}
 
-.retro-error-title {
-	font-weight: 500;
-	text-transform: uppercase;
-	letter-spacing: 0.5px;
-	margin-bottom: 6px;
-	font-size: 11px;
-}
+	.retro-error-title {
+		@apply font-medium uppercase tracking-wide mb-retro-lg text-retro-sm;
+	}
 
-.retro-error-message {
-	font-size: 11px;
-	margin-bottom: 4px;
-}
+	.retro-error-message {
+		@apply text-retro-sm mb-retro-md;
+	}
 
-.retro-error-details {
-	font-size: 10px;
-	color: var(--retro-muted);
-	font-style: italic;
-	margin-top: 6px;
+	.retro-error-details {
+		@apply text-retro-xs text-retro-muted italic mt-retro-lg;
+	}
 }

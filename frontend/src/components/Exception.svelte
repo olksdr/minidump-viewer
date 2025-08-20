@@ -121,44 +121,54 @@
 	}
 </script>
 
-<div class="exception-info">
+<div class="font-mono text-retro-sm leading-tight whitespace-normal">
 	{#if exceptionInfo.crash_reason}
-		<div class="exception-field">
-			<span class="field-name">crash_reason:</span>
-			<span class="field-value">{exceptionInfo.crash_reason}</span>
+		<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+			<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+				>crash_reason:</span
+			>
+			<span class="text-retro-text flex-1">{exceptionInfo.crash_reason}</span>
 		</div>
 	{/if}
 
-	<div class="exception-field">
-		<span class="field-name">thread_id:</span>
-		<span class="field-value">{formatAddress(exceptionInfo.thread_id)}</span>
+	<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+		<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']">thread_id:</span>
+		<span class="text-retro-text flex-1">{formatAddress(exceptionInfo.thread_id)}</span>
 	</div>
 
 	{#if exceptionInfo.crash_address}
-		<div class="exception-field">
-			<span class="field-name">crash_address:</span>
-			<span class="field-value">{formatAddress(exceptionInfo.crash_address)}</span>
+		<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+			<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+				>crash_address:</span
+			>
+			<span class="text-retro-text flex-1">{formatAddress(exceptionInfo.crash_address)}</span>
 		</div>
 	{/if}
 
 	{#if exceptionInfo.raw?.exception_record}
-		<div class="exception-field">
-			<span class="field-name">exception_code:</span>
-			<span class="field-value"
+		<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+			<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+				>exception_code:</span
+			>
+			<span class="text-retro-text flex-1"
 				>{getExceptionCodeName(exceptionInfo.raw.exception_record.exception_code)}</span
 			>
 		</div>
 
-		<div class="exception-field">
-			<span class="field-name">exception_flags:</span>
-			<span class="field-value"
+		<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+			<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+				>exception_flags:</span
+			>
+			<span class="text-retro-text flex-1"
 				>{getExceptionFlagsName(exceptionInfo.raw.exception_record.exception_flags)}</span
 			>
 		</div>
 
-		<div class="exception-field">
-			<span class="field-name">exception_address:</span>
-			<span class="field-value"
+		<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+			<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+				>exception_address:</span
+			>
+			<span class="text-retro-text flex-1"
 				>{formatAddress(exceptionInfo.raw.exception_record.exception_address)}</span
 			>
 		</div>
@@ -166,14 +176,21 @@
 
 	<!-- Collapsible Context -->
 	{#if exceptionInfo.context}
-		<div class="collapsible-section">
-			<button class="toggle-button" on:click={() => (contextExpanded = !contextExpanded)}>
-				<span class="toggle-icon">{contextExpanded ? '-' : '+'}</span>
-				<span class="section-title">context</span>
+		<div class="m-0 rounded-sm">
+			<button
+				class="bg-transparent border-none font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 ease-in-out hover:text-retro-purple"
+				on:click={() => (contextExpanded = !contextExpanded)}
+			>
+				<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+					>{contextExpanded ? '-' : '+'}</span
+				>
+				<span class="text-retro-text font-medium">context</span>
 			</button>
 
 			{#if contextExpanded}
-				<div class="expanded-content">
+				<div
+					class="m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border/15"
+				>
 					<RegisterContext
 						context={exceptionInfo.context}
 						debugFallback={exceptionInfo.context_debug}
@@ -185,40 +202,57 @@
 
 	<!-- Collapsible Raw Data -->
 	{#if exceptionInfo.raw}
-		<div class="collapsible-section">
-			<button class="toggle-button" on:click={() => (rawExpanded = !rawExpanded)}>
-				<span class="toggle-icon">{rawExpanded ? '-' : '+'}</span>
-				<span class="section-title">raw</span>
+		<div class="m-0 rounded-sm">
+			<button
+				class="bg-transparent border-none font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 ease-in-out hover:text-retro-purple"
+				on:click={() => (rawExpanded = !rawExpanded)}
+			>
+				<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+					>{rawExpanded ? '-' : '+'}</span
+				>
+				<span class="text-retro-text font-medium">raw</span>
 			</button>
 
 			{#if rawExpanded}
-				<div class="expanded-content">
-					<div class="exception-field">
-						<span class="field-name">thread_id:</span>
-						<span class="field-value">{formatAddress(exceptionInfo.raw.thread_id)}</span>
+				<div
+					class="m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border/15"
+				>
+					<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+						<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+							>thread_id:</span
+						>
+						<span class="text-retro-text flex-1">{formatAddress(exceptionInfo.raw.thread_id)}</span>
 					</div>
 
 					<!-- Exception Record collapsible nested section -->
-					<div class="nested-collapsible-section">
+					<div class="m-0 rounded-sm">
 						<button
-							class="nested-toggle-button"
+							class="bg-transparent border-none font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 ease-in-out hover:text-retro-purple ml-retro-4xl"
 							on:click={() => (exceptionRecordExpanded = !exceptionRecordExpanded)}
 						>
-							<span class="toggle-icon">{exceptionRecordExpanded ? '-' : '+'}</span>
-							<span class="section-title">exception_record</span>
+							<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+								>{exceptionRecordExpanded ? '-' : '+'}</span
+							>
+							<span class="text-retro-text font-medium">exception_record</span>
 						</button>
 
 						{#if exceptionRecordExpanded}
-							<div class="nested-expanded-content">
-								<div class="exception-field">
-									<span class="field-name">exception_record:</span>
-									<span class="field-value"
+							<div
+								class="m-0 ml-retro-5xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border/20 rounded-sm"
+							>
+								<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+									<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+										>exception_record:</span
+									>
+									<span class="text-retro-text flex-1"
 										>{formatAddress(exceptionInfo.raw.exception_record.exception_record)}</span
 									>
 								</div>
-								<div class="exception-field">
-									<span class="field-name">number_parameters:</span>
-									<span class="field-value"
+								<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+									<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+										>number_parameters:</span
+									>
+									<span class="text-retro-text flex-1"
 										>{formatValue(exceptionInfo.raw.exception_record.number_parameters)}</span
 									>
 								</div>
@@ -227,13 +261,15 @@
 										exceptionInfo.raw.exception_record.exception_information,
 										paramsExpanded
 									)}
-									<div class="exception-field">
-										<span class="field-name">exception_information:</span>
-										<span class="field-value">
+									<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+										<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+											>exception_information:</span
+										>
+										<span class="text-retro-text flex-1">
 											{arrayData.text}
 											{#if arrayData.hasMore}
 												<span
-													class="array-toggle"
+													class="text-retro-link cursor-pointer underline text-retro-sm font-mono transition-all duration-200 ease-in-out py-[1px] px-[2px] bg-transparent hover:text-retro-text hover:bg-retro-highlight"
 													on:click={() => (paramsExpanded = true)}
 													on:keydown={(e) => e.key === 'Enter' && (paramsExpanded = true)}
 													role="button"
@@ -243,7 +279,7 @@
 												</span>
 											{:else if paramsExpanded && arrayData.fullLength > 8}
 												<span
-													class="array-toggle"
+													class="text-retro-link cursor-pointer underline text-retro-sm font-mono transition-all duration-200 ease-in-out py-[1px] px-[2px] bg-transparent hover:text-retro-text hover:bg-retro-highlight"
 													on:click={() => (paramsExpanded = false)}
 													on:keydown={(e) => e.key === 'Enter' && (paramsExpanded = false)}
 													role="button"
@@ -265,159 +301,25 @@
 
 	<!-- Collapsible Debug Data -->
 	{#if exceptionInfo.debug}
-		<div class="collapsible-section">
-			<button class="toggle-button" on:click={() => (debugExpanded = !debugExpanded)}>
-				<span class="toggle-icon">{debugExpanded ? '-' : '+'}</span>
-				<span class="section-title">debug</span>
+		<div class="m-0 rounded-sm">
+			<button
+				class="bg-transparent border-none font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 ease-in-out hover:text-retro-purple"
+				on:click={() => (debugExpanded = !debugExpanded)}
+			>
+				<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+					>{debugExpanded ? '-' : '+'}</span
+				>
+				<span class="text-retro-text font-medium">debug</span>
 			</button>
 
 			{#if debugExpanded}
-				<div class="expanded-content raw-content">
-					<pre>{exceptionInfo.debug}</pre>
+				<div
+					class="m-0 ml-retro-4xl p-retro-md pl-retro-xl bg-gray-50 border-2 border-dashed border-retro-border/30 rounded-retro-sm"
+				>
+					<pre
+						class="text-retro-xs m-0 text-retro-muted whitespace-pre-wrap break-words">{exceptionInfo.debug}</pre>
 				</div>
 			{/if}
 		</div>
 	{/if}
 </div>
-
-<style>
-	.exception-info {
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 11px;
-		line-height: 1.2;
-		white-space: normal;
-	}
-
-	.exception-field {
-		display: flex;
-		margin: 0;
-		padding: 0;
-		padding-left: 16px;
-		line-height: 1.2;
-	}
-
-	.field-name {
-		color: var(--retro-accent);
-		min-width: 180px;
-		font-weight: 500;
-	}
-
-	.field-name::after {
-		content: ' ';
-	}
-
-	.field-value {
-		color: var(--retro-text);
-		flex: 1;
-	}
-
-	.collapsible-section {
-		margin: 0;
-		border-radius: 2px;
-	}
-
-	.toggle-button {
-		background: none;
-		border: none;
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 11px;
-		color: var(--retro-text);
-		cursor: pointer;
-		padding: 0;
-		display: flex;
-		align-items: center;
-		width: 100%;
-		text-align: left;
-		transition: all 0.2s ease;
-	}
-
-	.toggle-button:hover {
-		color: var(--retro-accent);
-	}
-
-	.toggle-icon {
-		color: var(--retro-link);
-		margin-right: 4px;
-		font-weight: 700;
-		text-decoration: underline;
-		min-width: 12px;
-		text-align: center;
-	}
-
-	.section-title {
-		color: var(--retro-text);
-		font-weight: 500;
-	}
-
-	.expanded-content {
-		margin: 0;
-		margin-left: 16px;
-		padding: 0;
-		padding-left: 8px;
-		background: transparent;
-		border-left: 2px solid rgba(74, 144, 164, 0.15);
-	}
-
-	.raw-content {
-		background: rgba(0, 0, 0, 0.02);
-	}
-
-	.raw-content pre {
-		font-size: 10px;
-		margin: 0;
-		color: var(--retro-muted);
-		white-space: pre-wrap;
-		word-break: break-word;
-	}
-
-	.array-toggle {
-		color: var(--retro-link);
-		cursor: pointer;
-		text-decoration: underline;
-		font-size: 11px;
-		font-family: 'JetBrains Mono', monospace;
-		transition: all 0.2s ease;
-		padding: 1px 2px;
-		background: transparent;
-	}
-
-	.array-toggle:hover {
-		color: var(--retro-text);
-		background: var(--retro-highlight);
-	}
-
-	.nested-collapsible-section {
-		margin: 0;
-		border-radius: 2px;
-	}
-
-	.nested-toggle-button {
-		background: none;
-		border: none;
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 11px;
-		color: var(--retro-text);
-		cursor: pointer;
-		padding: 0;
-		display: flex;
-		align-items: center;
-		width: 100%;
-		text-align: left;
-		transition: all 0.2s ease;
-		margin-left: 16px;
-	}
-
-	.nested-toggle-button:hover {
-		color: var(--retro-accent);
-	}
-
-	.nested-expanded-content {
-		margin: 0;
-		margin-left: 32px;
-		padding: 0;
-		padding-left: 8px;
-		background: transparent;
-		border-left: 2px solid rgba(74, 144, 164, 0.2);
-		border-radius: 2px;
-	}
-</style>

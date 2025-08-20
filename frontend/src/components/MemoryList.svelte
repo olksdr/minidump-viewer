@@ -95,60 +95,85 @@
 	}
 </script>
 
-<div class="memory-list">
+<div class="font-mono text-retro-sm leading-tight whitespace-normal">
 	<!-- Memory Regions Section -->
-	<div class="memory-summary">
-		<div class="memory-field">
-			<span class="field-name">total_memory_size:</span>
-			<span class="field-value"
+	<div class="m-0">
+		<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+			<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+				>total_memory_size:</span
+			>
+			<span class="text-retro-text flex-1"
 				>{memoryData.total_memory_size_formatted} ({formatValue(memoryData.total_memory_size)} bytes)</span
 			>
 		</div>
-		<div class="memory-field">
-			<span class="field-name">has_memory_info_stream:</span>
-			<span class="field-value">{memoryData.has_memory_info_stream}</span>
+		<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+			<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+				>has_memory_info_stream:</span
+			>
+			<span class="text-retro-text flex-1">{memoryData.has_memory_info_stream}</span>
 		</div>
 	</div>
 
 	{#each memoryData.regions as region, index (getRegionId(region, index))}
 		{@const regionId = getRegionId(region, index)}
-		<div class="memory-section">
-			<button class="memory-toggle" on:click={() => toggleRegion(regionId)}>
-				<span class="toggle-icon">{expandedRegions.has(regionId) ? '-' : '+'}</span>
-				<span class="memory-title">Memory Region #{index + 1}</span>
-				<span class="memory-info">
+		<div class="m-0 rounded-sm">
+			<button
+				class="bg-none border-none font-mono text-retro-sm text-retro-text cursor-pointer py-retro-sm px-0 flex items-center w-full text-left transition-all duration-200 hover:text-retro-purple"
+				on:click={() => toggleRegion(regionId)}
+			>
+				<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+					>{expandedRegions.has(regionId) ? '-' : '+'}</span
+				>
+				<span class="font-semibold mr-retro-xl text-retro-purple">Memory Region #{index + 1}</span>
+				<span class="text-retro-muted text-retro-xs font-normal ml-retro-xl">
 					({region.address_range}, {region.size_formatted})
-					{#if region.has_data}<span class="data-indicator">[DATA]</span>{/if}
+					{#if region.has_data}<span class="text-retro-purple font-semibold ml-retro-md"
+							>[DATA]</span
+						>{/if}
 				</span>
 			</button>
 
 			{#if expandedRegions.has(regionId)}
-				<div class="memory-content">
-					<div class="memory-field">
-						<span class="field-name">start_address:</span>
-						<span class="field-value">{region.start_address}</span>
+				<div
+					class="m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border border-opacity-15"
+				>
+					<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+						<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+							>start_address:</span
+						>
+						<span class="text-retro-text flex-1">{region.start_address}</span>
 					</div>
-					<div class="memory-field">
-						<span class="field-name">end_address:</span>
-						<span class="field-value">{region.end_address}</span>
+					<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+						<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+							>end_address:</span
+						>
+						<span class="text-retro-text flex-1">{region.end_address}</span>
 					</div>
-					<div class="memory-field">
-						<span class="field-name">address_range:</span>
-						<span class="field-value">{region.address_range}</span>
+					<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+						<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+							>address_range:</span
+						>
+						<span class="text-retro-text flex-1">{region.address_range}</span>
 					</div>
-					<div class="memory-field">
-						<span class="field-name">size:</span>
-						<span class="field-value"
+					<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+						<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+							>size:</span
+						>
+						<span class="text-retro-text flex-1"
 							>{region.size_formatted} ({formatValue(region.size)} bytes)</span
 						>
 					</div>
-					<div class="memory-field">
-						<span class="field-name">has_data:</span>
-						<span class="field-value">{region.has_data}</span>
+					<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+						<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+							>has_data:</span
+						>
+						<span class="text-retro-text flex-1">{region.has_data}</span>
 					</div>
-					<div class="memory-field">
-						<span class="field-name">data_size:</span>
-						<span class="field-value"
+					<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+						<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+							>data_size:</span
+						>
+						<span class="text-retro-text flex-1"
 							>{formatValue(region.data_size)} bytes{#if region.data_size !== region.size}
 								(of {formatValue(region.size)} total){/if}</span
 						>
@@ -160,64 +185,91 @@
 
 	<!-- Memory Range Map Section -->
 	{#if memoryData.memory_info}
-		<div class="section-divider">
-			<div class="section-header">MEMORY RANGE MAP</div>
-			<div class="memory-summary">
-				<div class="memory-field">
-					<span class="field-name">ranges_count:</span>
-					<span class="field-value">{memoryData.memory_info.ranges_count}</span>
+		<div class="mt-retro-4xl mb-retro-xl">
+			<div class="text-retro-purple font-semibold text-retro-base mb-retro-md">
+				MEMORY RANGE MAP
+			</div>
+			<div class="m-0">
+				<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+					<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+						>ranges_count:</span
+					>
+					<span class="text-retro-text flex-1">{memoryData.memory_info.ranges_count}</span>
 				</div>
 			</div>
 		</div>
 
 		{#each memoryData.memory_info.ranges as range, index (getRangeId(range, index))}
 			{@const rangeId = getRangeId(range, index)}
-			<div class="memory-section">
-				<button class="memory-toggle" on:click={() => toggleRange(rangeId)}>
-					<span class="toggle-icon">{expandedRanges.has(rangeId) ? '-' : '+'}</span>
-					<span class="memory-title">Range #{index + 1}</span>
-					<span class="memory-info">
+			<div class="m-0 rounded-sm">
+				<button
+					class="bg-none border-none font-mono text-retro-sm text-retro-text cursor-pointer py-retro-sm px-0 flex items-center w-full text-left transition-all duration-200 hover:text-retro-purple"
+					on:click={() => toggleRange(rangeId)}
+				>
+					<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+						>{expandedRanges.has(rangeId) ? '-' : '+'}</span
+					>
+					<span class="font-semibold mr-retro-xl text-retro-purple">Range #{index + 1}</span>
+					<span class="text-retro-muted text-retro-xs font-normal ml-retro-xl">
 						({range.base_address}, {range.region_size_formatted}, {range.protection})
 					</span>
 				</button>
 
 				{#if expandedRanges.has(rangeId)}
-					<div class="memory-content">
-						<div class="memory-field">
-							<span class="field-name">base_address:</span>
-							<span class="field-value">{range.base_address}</span>
+					<div
+						class="m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border border-opacity-15"
+					>
+						<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+							<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+								>base_address:</span
+							>
+							<span class="text-retro-text flex-1">{range.base_address}</span>
 						</div>
-						<div class="memory-field">
-							<span class="field-name">allocation_base:</span>
-							<span class="field-value">{range.allocation_base}</span>
+						<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+							<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+								>allocation_base:</span
+							>
+							<span class="text-retro-text flex-1">{range.allocation_base}</span>
 						</div>
-						<div class="memory-field">
-							<span class="field-name">region_size:</span>
-							<span class="field-value"
+						<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+							<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+								>region_size:</span
+							>
+							<span class="text-retro-text flex-1"
 								>{range.region_size_formatted} ({formatValue(range.region_size)} bytes)</span
 							>
 						</div>
-						<div class="memory-field">
-							<span class="field-name">state:</span>
-							<span class="field-value">{range.state} ({formatHex(range.state_value)})</span>
+						<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+							<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+								>state:</span
+							>
+							<span class="text-retro-text flex-1"
+								>{range.state} ({formatHex(range.state_value)})</span
+							>
 						</div>
-						<div class="memory-field">
-							<span class="field-name">protection:</span>
-							<span class="field-value"
+						<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+							<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+								>protection:</span
+							>
+							<span class="text-retro-text flex-1"
 								>{range.protection} ({formatHex(range.protection_value)})</span
 							>
 						</div>
-						<div class="memory-field">
-							<span class="field-name">allocation_protection:</span>
-							<span class="field-value"
+						<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+							<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+								>allocation_protection:</span
+							>
+							<span class="text-retro-text flex-1"
 								>{range.allocation_protection} ({formatHex(
 									range.allocation_protection_value
 								)})</span
 							>
 						</div>
-						<div class="memory-field">
-							<span class="field-name">memory_type:</span>
-							<span class="field-value"
+						<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+							<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+								>memory_type:</span
+							>
+							<span class="text-retro-text flex-1"
 								>{range.memory_type} ({formatHex(range.memory_type_value)})</span
 							>
 						</div>
@@ -226,16 +278,21 @@
 			</div>
 		{/each}
 	{:else}
-		<div class="section-divider">
-			<div class="section-header">MEMORY RANGE MAP</div>
-			<div class="memory-summary">
-				<div class="memory-field">
-					<span class="field-name">status:</span>
-					<span class="field-value retro-muted">Not available in this minidump</span>
+		<div class="mt-retro-4xl mb-retro-xl">
+			<div class="text-retro-purple font-semibold text-retro-base mb-retro-md">
+				MEMORY RANGE MAP
+			</div>
+			<div class="m-0">
+				<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+					<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']"
+						>status:</span
+					>
+					<span class="text-retro-text flex-1 text-retro-muted">Not available in this minidump</span
+					>
 				</div>
-				<div class="memory-field">
-					<span class="field-name">note:</span>
-					<span class="field-value retro-muted"
+				<div class="flex m-0 p-0 pl-retro-4xl leading-tight">
+					<span class="text-retro-purple min-w-[180px] font-medium after:content-[' ']">note:</span>
+					<span class="text-retro-text flex-1 text-retro-muted"
 						>Memory protection, state, and type info requires MinidumpMemoryInfoList stream</span
 					>
 				</div>
@@ -245,180 +302,25 @@
 
 	<!-- Debug Data -->
 	{#if memoryData.debug}
-		<div class="collapsible-section">
-			<button class="toggle-button" on:click={() => toggleSection('debug')}>
-				<span class="toggle-icon">{expandedSections['debug'] ? '-' : '+'}</span>
-				<span class="section-title">debug</span>
+		<div class="m-0 rounded-sm">
+			<button
+				class="bg-none border-none font-mono text-retro-sm text-retro-text cursor-pointer p-0 flex items-center w-full text-left transition-all duration-200 hover:text-retro-purple"
+				on:click={() => toggleSection('debug')}
+			>
+				<span class="text-retro-link mr-retro-md font-bold underline min-w-[12px] text-center"
+					>{expandedSections['debug'] ? '-' : '+'}</span
+				>
+				<span class="text-retro-text font-medium">debug</span>
 			</button>
 
 			{#if expandedSections['debug']}
-				<div class="expanded-content raw-content">
-					<pre>{memoryData.debug}</pre>
+				<div
+					class="m-0 ml-retro-4xl p-retro-md pl-retro-xl bg-gray-50 border-2 border-dashed border-retro-border/30 rounded-retro-sm"
+				>
+					<pre
+						class="text-retro-xs m-0 text-retro-muted whitespace-pre-wrap break-words">{memoryData.debug}</pre>
 				</div>
 			{/if}
 		</div>
 	{/if}
 </div>
-
-<style>
-	.memory-list {
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 11px;
-		line-height: 1.2;
-		white-space: normal;
-	}
-
-	.memory-summary {
-		margin: 0;
-	}
-
-	.memory-field {
-		display: flex;
-		margin: 0;
-		padding: 0;
-		padding-left: 16px;
-		line-height: 1.2;
-	}
-
-	.field-name {
-		color: var(--retro-accent);
-		min-width: 180px;
-		font-weight: 500;
-	}
-
-	.field-name::after {
-		content: ' ';
-	}
-
-	.field-value {
-		color: var(--retro-text);
-		flex: 1;
-	}
-
-	.section-divider {
-		margin-top: 16px;
-		margin-bottom: 8px;
-	}
-
-	.section-header {
-		color: var(--retro-accent);
-		font-weight: 600;
-		font-size: 12px;
-		margin-bottom: 4px;
-	}
-
-	.memory-section {
-		margin: 0;
-		border-radius: 2px;
-	}
-
-	.memory-toggle {
-		background: none;
-		border: none;
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 11px;
-		color: var(--retro-text);
-		cursor: pointer;
-		padding: 2px 0;
-		display: flex;
-		align-items: center;
-		width: 100%;
-		text-align: left;
-		transition: all 0.2s ease;
-	}
-
-	.memory-toggle:hover {
-		color: var(--retro-accent);
-	}
-
-	.toggle-icon {
-		color: var(--retro-link);
-		margin-right: 4px;
-		font-weight: 700;
-		text-decoration: underline;
-		min-width: 12px;
-		text-align: center;
-	}
-
-	.memory-title {
-		font-weight: 600;
-		margin-right: 8px;
-		color: var(--retro-accent);
-	}
-
-	.memory-info {
-		color: var(--retro-muted);
-		font-size: 10px;
-		font-weight: 400;
-		margin-left: 8px;
-	}
-
-	.data-indicator {
-		color: var(--retro-accent);
-		font-weight: 600;
-		margin-left: 4px;
-	}
-
-	.memory-content {
-		margin: 0;
-		margin-left: 16px;
-		padding: 0;
-		padding-left: 8px;
-		background: transparent;
-		border-left: 2px solid rgba(74, 144, 164, 0.15);
-	}
-
-	.collapsible-section {
-		margin: 0;
-		border-radius: 2px;
-	}
-
-	.toggle-button {
-		background: none;
-		border: none;
-		font-family: 'JetBrains Mono', monospace;
-		font-size: 11px;
-		color: var(--retro-text);
-		cursor: pointer;
-		padding: 0;
-		display: flex;
-		align-items: center;
-		width: 100%;
-		text-align: left;
-		transition: all 0.2s ease;
-	}
-
-	.toggle-button:hover {
-		color: var(--retro-accent);
-	}
-
-	.section-title {
-		color: var(--retro-text);
-		font-weight: 500;
-	}
-
-	.expanded-content {
-		margin: 0;
-		margin-left: 16px;
-		padding: 0;
-		padding-left: 8px;
-		background: transparent;
-		border-left: 2px solid rgba(74, 144, 164, 0.15);
-	}
-
-	.raw-content {
-		background: rgba(0, 0, 0, 0.02);
-	}
-
-	.raw-content pre {
-		font-size: 10px;
-		margin: 0;
-		color: var(--retro-muted);
-		white-space: pre-wrap;
-		word-break: break-word;
-	}
-
-	.retro-muted {
-		color: var(--retro-muted);
-	}
-</style>
