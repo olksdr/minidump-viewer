@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
-	import SystemInfo from './SystemInfo.svelte';
-	import Exception from './Exception.svelte';
-	import ThreadList from './ThreadList.svelte';
-	import ModuleList from './ModuleList.svelte';
-	import MemoryList from './MemoryList.svelte';
+	import SystemInfo from '../components/SystemInfo.svelte';
+	import Exception from '../components/Exception.svelte';
+	import ThreadList from '../components/ThreadList.svelte';
+	import ModuleList from '../components/ModuleList.svelte';
+	import MemoryList from '../components/MemoryList.svelte';
 
 	// WASM-related imports (will be loaded dynamically)
 	let parse_minidump: ((data: Uint8Array) => Promise<MinidumpResult>) | null = null;
