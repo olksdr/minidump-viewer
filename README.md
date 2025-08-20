@@ -4,7 +4,7 @@
 
 # Minidump Viewer
 
-⚠️ **Beta**: This project is currently in beta. Expect some rough edges and please report any issues you encounter!
+> ⚠️ **Beta**: This project is currently in beta. Expect some rough edges and please report any issues you encounter!
 
 
 Ever had a crash dump file and wished you could peek inside without installing heavy debugging tools?
