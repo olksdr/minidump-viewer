@@ -366,13 +366,13 @@
 									class="m-0 ml-retro-4xl p-0 pl-retro-xl bg-transparent border-l-2 border-retro-border/15"
 								>
 									<div
-										class="font-mono text-retro-xs bg-retro-lime/8 p-retro-md rounded-retro border border-retro-border/20 {thread.stack_unwinding_method.toLowerCase() ===
+										class="font-mono text-retro-xs p-retro-md rounded-retro border border-retro-border/20 {thread.stack_unwinding_method.toLowerCase() ===
 										'ok'
-											? 'border-retro-lime/40 bg-retro-lime/10'
+											? 'border-retro-lime/20 bg-retro-lime/10'
 											: thread.stack_unwinding_method.toLowerCase() === 'fallback'
-												? 'border-retro-amber/40 bg-retro-amber/15'
+												? 'border-retro-orange/20 bg-retro-orange/10'
 												: thread.stack_unwinding_method.toLowerCase() === 'failed'
-													? 'border-red-400/40 bg-red-50/50'
+													? 'border-red-400/20 bg-red-400/10'
 													: ''}"
 									>
 										{#each thread.stack_frames as frame, index}
